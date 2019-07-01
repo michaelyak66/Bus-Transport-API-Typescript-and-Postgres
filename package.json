@@ -1,0 +1,33 @@
+{
+  "name": "way-farer-api",
+  "version": "1.0.0",
+  "engines": {
+    "node": "8.10.0"
+  },
+  "description": "WayFarer is a public bus transportation booking server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mcdavid95/way-farer-api.git"
+  },
+  "keywords": [
+    "trip",
+    "ride",
+    "destination",
+    "location"
+  ],
+  "author": "Mcdavid95",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mcdavid95/way-farer-api/issues"
+  },
+  "homepage": "https://github.com/Mcdavid95/way-farer-api#readme",
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.18.0"
+  }
+}
