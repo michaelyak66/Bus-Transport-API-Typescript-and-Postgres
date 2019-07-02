@@ -9,8 +9,10 @@
   "scripts": {
     "build": "babel ./ -d build --only src --ignore node_modules --source-maps inline",
     "dev-start": "babel-watch src/index.js",
+    "lint": "eslint --ignore-path .gitignore .",
     "prebuild": "rm -rf build/*",
     "prestart": "npm run build",
+    "pretest": "npm run lint",
     "start": "node build/src/index.js",
     "test": "nyc --reporter=text --reporter=html --reporter=lcov mocha --timeout 35000 --require @babel/register ./tests/** --exit"
   },
