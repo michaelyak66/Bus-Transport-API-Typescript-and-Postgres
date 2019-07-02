@@ -7,8 +7,12 @@
   "description": "WayFarer is a public bus transportation booking server.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
-    "dev-start": "babel-watch index.js"
+    "build": "babel ./ -d build --only src --ignore node_modules --source-maps inline",
+    "dev-start": "babel-watch src/index.js",
+    "prebuild": "rm -rf build/*",
+    "prestart": "npm run build",
+    "start": "node build/src/index.js",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -32,12 +36,11 @@
     "eslint-plugin-import": "^2.18.0"
   },
   "dependencies": {
+    "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.7.0",
+    "@babel/runtime": "^7.4.5",
     "babel-watch": "^7.0.0",
     "bunyan": "^1.8.12",
     "cors": "^2.8.5",
