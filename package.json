@@ -12,7 +12,7 @@
     "prebuild": "rm -rf build/*",
     "prestart": "npm run build",
     "start": "node build/src/index.js",
-    "test": "mocha"
+    "test": "nyc --reporter=text --reporter=html --reporter=lcov mocha --timeout 35000 --require @babel/register ./tests/** --exit"
   },
   "repository": {
     "type": "git",
@@ -31,9 +31,14 @@
   },
   "homepage": "https://github.com/Mcdavid95/way-farer-api#readme",
   "devDependencies": {
+    "@babel/register": "^7.4.4",
+    "chai": "^4.2.0",
     "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.18.0"
+    "eslint-plugin-import": "^2.18.0",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "@babel/cli": "^7.4.4",
