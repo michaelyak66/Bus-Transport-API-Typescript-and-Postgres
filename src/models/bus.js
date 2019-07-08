@@ -22,7 +22,7 @@ export const createBusTable = async () => {
   const client = await pool.connect();
   const queryText = `
     CREATE TABLE IF NOT EXISTS
-      Bus(
+      Buses(
         id SERIAL PRIMARY KEY,
         number_plate VARCHAR(128) UNIQUE NOT NULL,
         manufacturer VARCHAR NOT NULL,
@@ -48,7 +48,7 @@ export const createBusTable = async () => {
  */
 export const dropBusTable = async () => {
   const client = await pool.connect();
-  const queryText = 'DROP TABLE IF EXISTS Bus';
+  const queryText = 'DROP TABLE IF EXISTS Buses';
   try {
     const response = await client.query(queryText);
     logger().info(response);

@@ -1,14 +1,9 @@
-import { createUserTable, dropUserTable } from './user';
-import { createBusTable, dropBusTable } from './bus';
-import { createTripTable, dropTripTable } from './trip';
+import createTables from './createTables';
+import dropTables from './dropTables';
 
 module.exports = {
-  createUserTable,
-  dropUserTable,
-  createBusTable,
-  dropBusTable,
-  createTripTable,
-  dropTripTable
+  createTables,
+  dropTables
 };
 
 require('make-runnable');

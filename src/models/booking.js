@@ -22,7 +22,7 @@ export const createBookingTable = async () => {
   const client = await pool.connect();
   const queryText = `
     CREATE TABLE IF NOT EXISTS
-      Booking(
+      Bookings(
         id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL,
         trip_id INTEGER NOT NULL,
@@ -47,7 +47,7 @@ export const createBookingTable = async () => {
  */
 export const dropBookingTable = async () => {
   const client = await pool.connect();
-  const queryText = 'DROP TABLE IF EXISTS Booking';
+  const queryText = 'DROP TABLE IF EXISTS Bookings';
   try {
     const response = await client.query(queryText);
     logger().info(response);

@@ -31,7 +31,7 @@ export const createTripTable = async () => {
     await client.query(enumText);
     const queryText = `
       CREATE TABLE IF NOT EXISTS
-        trip(
+        Trips(
           id SERIAL PRIMARY KEY,
           bus_id INTEGER NOT NULL,
           origin VARCHAR NOT NULL,
@@ -57,7 +57,7 @@ export const createTripTable = async () => {
  */
 export const dropTripTable = async () => {
   const client = await pool.connect();
-  const queryText = 'DROP TABLE IF EXISTS Trip';
+  const queryText = 'DROP TABLE IF EXISTS Trips';
   try {
     const response = await client.query(queryText);
     logger().info(response);

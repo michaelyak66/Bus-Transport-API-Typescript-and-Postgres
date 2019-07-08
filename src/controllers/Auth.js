@@ -13,19 +13,20 @@ import {
 const Auth = {
   async create(req, res) {
     const {
-      email, firstname, lastname, password
+      email, firstname, lastname, password, userType
     } = req.body;
     try {
       const hash = await hashPassword(password);
       const createQuery = `INSERT INTO
-      users(email, first_name, last_name, password, created_date, modified_date)
-      VALUES($1, $2, $3, $4, $5, $6)
+      Users(email, first_name, last_name, password, is_admin, created_date, modified_date)
+      VALUES($1, $2, $3, $4, $5, $6, $7)
       returning *`;
       const values = [
         email.trim().toLowerCase(),
         firstname.trim().toLowerCase(),
         lastname.trim().toLowerCase(),
         hash,
+        userType === 'admin',
         moment(new Date()),
         moment(new Date())
       ];
@@ -40,7 +41,7 @@ const Auth = {
       if (error.routine === '_bt_check_unique') {
         return handleServerResponseError(res, 409, `User with Email:- ${email.trim().toLowerCase()} already exists`);
       }
-      return handleServerError(res, error);
+      handleServerError(res, error);
     }
   }
 };

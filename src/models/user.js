@@ -22,7 +22,7 @@ export const createUserTable = async () => {
   const client = await pool.connect();
   const queryText = `
     CREATE TABLE IF NOT EXISTS
-      users(
+      Users(
         id SERIAL PRIMARY KEY,
         email VARCHAR(128) UNIQUE NOT NULL,
         first_name VARCHAR(128) NOT NULL,
@@ -48,7 +48,7 @@ export const createUserTable = async () => {
  */
 export const dropUserTable = async () => {
   const client = await pool.connect();
-  const queryText = 'DROP TABLE IF EXISTS users';
+  const queryText = 'DROP TABLE IF EXISTS Users';
   try {
     const response = await client.query(queryText);
     logger().info(response);
