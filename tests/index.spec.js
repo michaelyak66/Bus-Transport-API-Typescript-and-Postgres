@@ -3,7 +3,7 @@ import api from './test.config';
 
 const { expect } = chai;
 
-describe('User controller', () => {
+describe('API', () => {
   it('should connect to the Server', async () => {
     const server = await api.get('/api/v1');
     expect(server.statusCode).to.equal(200);
