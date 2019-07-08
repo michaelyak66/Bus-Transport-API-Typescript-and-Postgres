@@ -67,7 +67,7 @@ export const isPassword = (password, hash) => bcrypt.compareSync(password, hash)
 
 /**
  * createToken
- * @param {Number} id user id gotten from database
+ * @param {Number} id user id gotten from DATABASE_URL
  * @description creates new jwt token for authentication
  * @returns {String} newly created jwt
  */
