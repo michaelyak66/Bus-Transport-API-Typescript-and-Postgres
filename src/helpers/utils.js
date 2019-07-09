@@ -2,6 +2,7 @@ import bunyan from 'bunyan';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import db from '../controllers/db';
 
 dotenv.config();
 
@@ -88,22 +89,23 @@ export const createToken = (id) => {
  * @param {*} next
  * @returns {Object} response object
  */
-export const hasToken = (req, res, next) => {
+export const hasToken = async (req, res, next) => {
   const token = req.body.token || req.headers['x-access-token'];
-  if (token) {
-    jwt.verify(token, process.env.SECRET, (err, decoded) => {
-      if (err) {
-        return res.status(403).send({
-          success: false,
-          message: err
-        });
+  try {
+    if (token) {
+      const decoded = await jwt.verify(token, process.env.SECRET);
+      const text = 'SELECT * FROM Users WHERE id = $1';
+      const { rows } = await db.query(text, [decoded.id]);
+      if (!rows[0]) {
+        return handleServerResponseError(res, 403, 'Token you provided is invalid');
       }
       req.decoded = decoded;
       return next();
-    });
-  } else {
+    }
     return res.status(403).send({
       message: 'You have to be loggedin first'
     });
+  } catch (error) {
+    return handleServerResponseError(res, 403, error);
   }
 };
