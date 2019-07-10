@@ -11,16 +11,17 @@ import { handleServerResponseError } from './utils';
  */
 const signupInput = (req, res, next) => {
   const {
-    firstname, lastname, email, password
+    // eslint-disable-next-line camelcase
+    first_name, last_name, email, password
   } = req.body;
   const schema = Joi.object().keys({
-    firstname: Joi.string().required(),
-    lastname: Joi.string().required(),
+    first_name: Joi.string().required(),
+    last_name: Joi.string().required(),
     email: Joi.string().trim().email().required(),
     password: Joi.string().min(8).required()
   });
   const result = Joi.validate({
-    firstname, lastname, email, password
+    first_name, last_name, email, password
   }, schema);
   if (result.error) {
     return handleServerResponseError(res, 401, result.error.details[0].message);
@@ -28,6 +29,33 @@ const signupInput = (req, res, next) => {
   return next();
 };
 
+/**
+ * @function
+  * @param {*} req
+  * @param {*} res
+  * @param {*} next
+ * @description validates signin input
+ * @returns {Response | RequestHandler} error or request handler
+ */
+const signinInput = (req, res, next) => {
+  const {
+    email, password
+  } = req.body;
+  const schema = Joi.object().keys({
+    email: Joi.string().trim().email().required(),
+    password: Joi.string().min(8).required()
+  });
+  const result = Joi.validate({
+    email, password
+  }, schema);
+  if (result.error) {
+    return handleServerResponseError(res, 401, result.error.details[0].message);
+  }
+  return next();
+};
+
+
 export default {
-  validateSignup: signupInput
+  validateSignup: signupInput,
+  validateSignin: signinInput
 };

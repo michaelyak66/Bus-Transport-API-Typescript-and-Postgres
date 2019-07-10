@@ -2,18 +2,18 @@ import moment from 'moment';
 import db from './db';
 import {
   createToken,
-  // hasToken,
   hashPassword,
-  // isPassword,
   handleServerError,
   handleServerResponse,
-  handleServerResponseError
+  handleServerResponseError,
+  isPassword
 } from '../helpers/utils';
 
 const Auth = {
   async create(req, res) {
     const {
-      email, firstname, lastname, password, userType
+      // eslint-disable-next-line camelcase
+      email, first_name, last_name, password, userType
     } = req.body;
     try {
       const hash = await hashPassword(password);
@@ -23,8 +23,8 @@ const Auth = {
       returning *`;
       const values = [
         email.trim().toLowerCase(),
-        firstname.trim().toLowerCase(),
-        lastname.trim().toLowerCase(),
+        first_name.trim().toLowerCase(),
+        last_name.trim().toLowerCase(),
         hash,
         userType === 'admin',
         moment(new Date()),
@@ -43,7 +43,31 @@ const Auth = {
       }
       handleServerError(res, error);
     }
-  }
+  },
+
+  /**
+   * Login
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} user object
+   */
+  async login(req, res) {
+    const userQuery = 'SELECT * FROM users WHERE email = $1';
+    const { email, password } = req.body;
+    try {
+      const { rows } = await db.query(userQuery, [email]);
+      if (!rows[0]) {
+        return handleServerResponseError(res, 404, 'Account with Email not found');
+      }
+      if (!isPassword(password, rows[0].password)) {
+        return handleServerResponseError(res, 403, 'Password incorrect');
+      }
+      const token = createToken(rows[0].id);
+      return handleServerResponse(res, 200, { user_id: rows[0].id, token });
+    } catch (error) {
+      return handleServerError(res, error);
+    }
+  },
 };
 
 export default Auth;
