@@ -69,13 +69,14 @@ export const isPassword = (password, hash) => bcrypt.compareSync(password, hash)
 /**
  * createToken
  * @param {Number} id user id gotten from DATABASE_URL
+ * @param {Number} isAdmin value of if user is an admin
  * @description creates new jwt token for authentication
  * @returns {String} newly created jwt
  */
-export const createToken = (id) => {
+export const createToken = (id, isAdmin) => {
   const token = jwt.sign(
     {
-      id
+      id, isAdmin
     },
     process.env.SECRET, { expiresIn: '7d' }
   );
@@ -105,6 +106,26 @@ export const hasToken = async (req, res, next) => {
     return res.status(403).send({
       message: 'You have to be loggedin first'
     });
+  } catch (error) {
+    return handleServerResponseError(res, 403, error);
+  }
+};
+
+/**
+ * @method hasToken
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @returns {Object} response object
+ */
+export const isAdmin = async (req, res, next) => {
+  const token = req.body.token || req.headers['x-access-token'];
+  try {
+    const decoded = await jwt.verify(token, process.env.SECRET);
+    if (!decoded.isAdmin) {
+      return handleServerResponseError(res, 403, 'You are not authorized to access this endpoint');
+    }
+    return next();
   } catch (error) {
     return handleServerResponseError(res, 403, error);
   }

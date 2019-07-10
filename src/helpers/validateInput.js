@@ -54,8 +54,38 @@ const signinInput = (req, res, next) => {
   return next();
 };
 
+/**
+ * @function
+  * @param {*} req
+  * @param {*} res
+  * @param {*} next
+ * @description validates create bus input
+ * @returns {Response | RequestHandler} error or request handler
+ */
+const createBusInput = (req, res, next) => {
+  const {
+    // eslint-disable-next-line camelcase
+    model, manufacturer, year, numberPlate, capacity
+  } = req.body;
+  const schema = Joi.object().keys({
+    model: Joi.string().required(),
+    manufacturer: Joi.string().required(),
+    year: Joi.string().trim().required(),
+    numberPlate: Joi.string().required(),
+    capacity: Joi.number().required()
+  });
+  const result = Joi.validate({
+    model, manufacturer, year, numberPlate, capacity
+  }, schema);
+  if (result.error) {
+    return handleServerResponseError(res, 401, result.error.details[0].message);
+  }
+  return next();
+};
+
 
 export default {
   validateSignup: signupInput,
-  validateSignin: signinInput
+  validateSignin: signinInput,
+  validateCreateBus: createBusInput
 };
