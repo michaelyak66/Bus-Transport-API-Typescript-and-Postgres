@@ -31,7 +31,7 @@ const Auth = {
         moment(new Date())
       ];
       const { rows } = await db.query(createQuery, values);
-      const token = createToken(rows[0].id);
+      const token = createToken(rows[0].id, rows[0].is_admin);
       return handleServerResponse(res, 201, {
         user_id: rows[0].id,
         is_admin: rows[0].is_admin,
@@ -62,7 +62,7 @@ const Auth = {
       if (!isPassword(password, rows[0].password)) {
         return handleServerResponseError(res, 403, 'Password incorrect');
       }
-      const token = createToken(rows[0].id);
+      const token = createToken(rows[0].id, rows[0].is_admin);
       return handleServerResponse(res, 200, { user_id: rows[0].id, token });
     } catch (error) {
       return handleServerError(res, error);

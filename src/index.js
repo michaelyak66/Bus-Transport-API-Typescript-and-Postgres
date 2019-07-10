@@ -6,6 +6,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { logger } from './helpers/utils';
 import auth from './routes/auth';
+import bus from './routes/bus';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.get('/api/v1', (req, res) => res.status(200).send({
 }));
 
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/bus', bus);
 
 app.listen(port);
 logger().info(`app running on port ${port}`);
