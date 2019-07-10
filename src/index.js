@@ -28,7 +28,7 @@ app.get('/api/v1', (req, res) => res.status(200).send({
 }));
 
 app.use('/api/v1/auth', auth);
-app.use('/api/v1/bus', bus);
+app.use('/api/v1/buses', bus);
 
 app.listen(port);
 logger().info(`app running on port ${port}`);

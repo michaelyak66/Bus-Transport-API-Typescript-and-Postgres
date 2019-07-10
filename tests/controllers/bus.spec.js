@@ -20,7 +20,7 @@ describe('Bus controller', () => {
   });
 
   it('should create a new bus', async () => {
-    const server = await api.post('/api/v1/bus')
+    const server = await api.post('/api/v1/buses')
       .type('form')
       .set('Content-Type', 'application/json')
       .set('x-access-token', adminToken)
@@ -29,7 +29,7 @@ describe('Bus controller', () => {
   });
 
   it('should not create a new bus if token is not present', async () => {
-    const server = await api.post('/api/v1/bus')
+    const server = await api.post('/api/v1/buses')
       .type('form')
       .set('Content-Type', 'application/json')
       .send(bus);
@@ -46,7 +46,7 @@ describe('Bus controller', () => {
   });
 
   it('should not create a new bus if user is not an admin', async () => {
-    const server = await api.post('/api/v1/bus')
+    const server = await api.post('/api/v1/buses')
       .type('form')
       .set('Content-Type', 'application/json')
       .set('x-access-token', userToken)
@@ -55,7 +55,7 @@ describe('Bus controller', () => {
   });
 
   it('should not create a new bus if plate number exists', async () => {
-    const server = await api.post('/api/v1/bus')
+    const server = await api.post('/api/v1/buses')
       .type('form')
       .set('Content-Type', 'application/json')
       .set('x-access-token', adminToken)
