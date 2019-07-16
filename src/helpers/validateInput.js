@@ -112,9 +112,35 @@ const createTripInput = (req, res, next) => {
   return next();
 };
 
+/**
+ * @function
+  * @param {*} req
+  * @param {*} res
+  * @param {*} next
+ * @description validates create booking input
+ * @returns {Response | RequestHandler} error or request handler
+ */
+const createBookingInput = (req, res, next) => {
+  const {
+    // eslint-disable-next-line camelcase
+    trip_id
+  } = req.body;
+  const schema = Joi.object().keys({
+    trip_id: Joi.number().required(),
+  });
+  const result = Joi.validate({
+    trip_id
+  }, schema);
+  if (result.error) {
+    return handleServerResponseError(res, 401, result.error.details[0].message);
+  }
+  return next();
+};
+
 export default {
   validateSignup: signupInput,
   validateSignin: signinInput,
   validateCreateBus: createBusInput,
-  validateCreateTrip: createTripInput
+  validateCreateTrip: createTripInput,
+  validateCreateBooking: createBookingInput
 };

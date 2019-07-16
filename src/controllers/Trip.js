@@ -34,16 +34,6 @@ const createSeats = (busCapacity) => {
   return seats;
 };
 
-const constructData = trip => ({
-  trip_id: trip.id,
-  bus_id: trip.bus_id,
-  origin: trip.origin,
-  destination: trip.destination,
-  trip_date: trip.trip_date,
-  fare: trip.fare,
-  seats: trip.seats
-});
-
 const Trip = {
   /**
    * @method create
@@ -64,11 +54,11 @@ const Trip = {
       const values = [
         bus_id, origin.trim().toLowerCase(),
         destination.trim().toLowerCase(), moment(trip_date),
-        fare, createSeats(bus.capacity),
+        fare, createSeats(bus ? bus.capacity : 7),
         moment(new Date()), moment(new Date())
       ];
       const { rows } = await db.query(createQuery, values);
-      return handleServerResponse(res, 201, constructData(rows[0]));
+      return handleServerResponse(res, 201, rows[0]);
     } catch (error) {
       handleServerError(res, error);
     }
@@ -83,8 +73,7 @@ const Trip = {
     try {
       const findAllQuery = 'SELECT * FROM Trips';
       const { rows } = await db.query(findAllQuery);
-      const result = await rows.map(row => constructData(row));
-      return handleServerResponse(res, 200, result);
+      return handleServerResponse(res, 200, rows);
     } catch (error) {
       handleServerError(res, error);
     }
@@ -100,7 +89,23 @@ const Trip = {
       const { trip_id } = req.params;
       const findAllQuery = 'SELECT * FROM Trips WHERE id = $1';
       const { rows } = await db.query(findAllQuery, [trip_id]);
-      return handleServerResponse(res, 200, constructData(rows[0]));
+      return handleServerResponse(res, 200, rows[0]);
+    } catch (error) {
+      handleServerError(res, error);
+    }
+  },
+  /**
+   * @method cancelTrip
+   * @param {object} req request object
+   * @param {object} res response object
+   * @returns {object} response object
+   */
+  async cancelTrip(req, res) {
+    try {
+      const { tripId } = req.params;
+      const findAllQuery = 'UPDATE Trips SET status = $2 WHERE id = $1 returning *';
+      await db.query(findAllQuery, [tripId, 'cancelled']);
+      return handleServerResponse(res, 200, { message: 'Trip cancelled successfully' });
     } catch (error) {
       handleServerError(res, error);
     }
