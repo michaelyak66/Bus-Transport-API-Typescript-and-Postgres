@@ -1,7 +1,7 @@
 import createTables from './createTables';
 import dropTables from './dropTables';
 
-module.exports = {
+export {
   createTables,
   dropTables
 };

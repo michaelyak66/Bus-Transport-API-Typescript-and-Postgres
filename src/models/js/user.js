@@ -1,6 +1,6 @@
 
 import { Pool } from 'pg';
-import { logger } from '../helpers/utils';
+import { logger } from '../../helpers/utils';
 
 const dotenv = require('dotenv');
 
@@ -14,26 +14,30 @@ pool.on('connect', () => {
   logger().info('connected to the db');
 });
 
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
+
+
 /**
  * Create Tables
  * @returns {*} void
  */
-export const createBusTable = async () => {
+export const createUserTable = async () => {
   const client = await pool.connect();
+  console.log("client:", client);
   const queryText = `
     CREATE TABLE IF NOT EXISTS
-      Buses(
+      Users(
         id SERIAL PRIMARY KEY,
-        number_plate VARCHAR(128) UNIQUE NOT NULL,
-        manufacturer VARCHAR NOT NULL,
-        model VARCHAR NOT NULL,
-        year VARCHAR(128) NOT NULL,
-        capacity INTEGER,
+        email VARCHAR(128) UNIQUE NOT NULL,
+        first_name VARCHAR(128) NOT NULL,
+        password VARCHAR NOT NULL,
+        last_name VARCHAR(128) NOT NULL,
+        is_admin BOOLEAN DEFAULT false,
         created_date TIMESTAMP,
         modified_date TIMESTAMP
       )`;
   try {
-    logger().info('Creating Buses table');
+    logger().info('Creating Users table');
     const response = await client.query(queryText);
     logger().info(response);
   } catch (error) {
@@ -47,11 +51,11 @@ export const createBusTable = async () => {
  * Drop Tables
  * @returns {*} void
  */
-export const dropBusTable = async () => {
-  logger().info('Dropping Buses table');
+export const dropUserTable = async () => {
   const client = await pool.connect();
-  const queryText = 'DROP TABLE IF EXISTS Buses';
+  const queryText = 'DROP TABLE IF EXISTS Users';
   try {
+    logger().info('Dropping Users table');
     const response = await client.query(queryText);
     logger().info(response);
   } catch (error) {

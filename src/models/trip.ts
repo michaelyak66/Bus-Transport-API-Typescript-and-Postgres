@@ -1,8 +1,6 @@
-
 import { Pool } from 'pg';
 import { logger } from '../helpers/utils';
-
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -16,9 +14,9 @@ pool.on('connect', () => {
 
 /**
  * Create Tables
- * @returns {*} void
+ * @returns {void}
  */
-export const createTripTable = async () => {
+export const createTripTable = async (): Promise<void> => {
   const client = await pool.connect();
   try {
     const enumText = `
@@ -55,9 +53,9 @@ export const createTripTable = async () => {
 
 /**
  * Drop Tables
- * @returns {*} void
+ * @returns {void}
  */
-export const dropTripTable = async () => {
+export const dropTripTable = async (): Promise<void> => {
   const client = await pool.connect();
   const queryText = 'DROP TABLE IF EXISTS Trips';
   try {

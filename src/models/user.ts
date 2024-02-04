@@ -1,8 +1,6 @@
-
 import { Pool } from 'pg';
 import { logger } from '../helpers/utils';
-
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -16,12 +14,11 @@ pool.on('connect', () => {
 
 console.log("DATABASE_URL:", process.env.DATABASE_URL);
 
-
 /**
  * Create Tables
- * @returns {*} void
+ * @returns {void}
  */
-export const createUserTable = async () => {
+export const createUserTable = async (): Promise<void> => {
   const client = await pool.connect();
   console.log("client:", client);
   const queryText = `
@@ -49,9 +46,9 @@ export const createUserTable = async () => {
 
 /**
  * Drop Tables
- * @returns {*} void
+ * @returns {void}
  */
-export const dropUserTable = async () => {
+export const dropUserTable = async (): Promise<void> => {
   const client = await pool.connect();
   const queryText = 'DROP TABLE IF EXISTS Users';
   try {
