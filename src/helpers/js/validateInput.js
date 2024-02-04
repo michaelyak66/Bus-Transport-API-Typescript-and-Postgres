@@ -1,5 +1,8 @@
-import Joi from '@hapi/joi';
-import { handleServerResponseError } from './utils';
+import Joi from 'joi';
+import { handleServerResponseError } from '../utils';
+
+console.log("e reach here")
+
 
 /**
  * @function
@@ -10,6 +13,9 @@ import { handleServerResponseError } from './utils';
  * @returns {Response | RequestHandler} error or request handler
  */
 const signupInput = (req, res, next) => {
+  // logger().info(req);
+  console.log(req.body)
+
   const {
     // eslint-disable-next-line camelcase
     first_name, last_name, email, password
@@ -20,10 +26,24 @@ const signupInput = (req, res, next) => {
     email: Joi.string().trim().email().required(),
     password: Joi.string().min(8).required()
   });
-  const result = Joi.validate({
-    first_name, last_name, email, password
-  }, schema);
+
+  const validationObject = {
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    password: req.body.password
+  };
+  
+  const result = schema.validate(validationObject);
+  
+
+  // const result = Joi.validate({
+  //   first_name, last_name, email, password
+  // }, schema);
+
+
   if (result.error) {
+    console.log("2", result.error);
     return handleServerResponseError(res, 401, result.error.details[0].message);
   }
   return next();
@@ -45,9 +65,18 @@ const signinInput = (req, res, next) => {
     email: Joi.string().trim().email().required(),
     password: Joi.string().min(8).required()
   });
-  const result = Joi.validate({
-    email, password
-  }, schema);
+
+  const validationObject = {
+    email: req.body.email,
+    password: req.body.password
+  };
+  
+  const result = schema.validate(validationObject);
+
+  // const result = Joi.validate({
+  //   email, password
+  // }, schema);
+
   if (result.error) {
     return handleServerResponseError(res, 401, result.error.details[0].message);
   }
@@ -74,9 +103,22 @@ const createBusInput = (req, res, next) => {
     numberPlate: Joi.string().required(),
     capacity: Joi.number().required()
   });
-  const result = Joi.validate({
-    model, manufacturer, year, numberPlate, capacity
-  }, schema);
+
+  const validationObject = {
+    model: req.body.model,
+    manufacturer: req.body.manufacturer,
+    year: req.body.year,
+    numberPlate: req.body.numberPlate,
+    capacity: req.body.capacity
+
+  };
+  
+  const result = schema.validate(validationObject);
+
+  // const result = Joi.validate({
+  //   model, manufacturer, year, numberPlate, capacity
+  // }, schema);
+
   if (result.error) {
     return handleServerResponseError(res, 401, result.error.details[0].message);
   }
@@ -103,9 +145,22 @@ const createTripInput = (req, res, next) => {
     trip_date: Joi.string().required(),
     fare: Joi.number().required()
   });
-  const result = Joi.validate({
-    bus_id, origin, destination, trip_date, fare
-  }, schema);
+
+  const validationObject = {
+    bus_id: req.body.bus_id,
+    origin: req.body.origin,
+    destination: req.body.destination,
+    trip_date: req.body.trip_date,
+    fare: req.body.fare
+
+  };
+  
+  const result = schema.validate(validationObject);
+
+  // const result = Joi.validate({
+  //   bus_id, origin, destination, trip_date, fare
+  // }, schema);
+
   if (result.error) {
     return handleServerResponseError(res, 401, result.error.details[0].message);
   }
@@ -128,9 +183,13 @@ const createBookingInput = (req, res, next) => {
   const schema = Joi.object().keys({
     trip_id: Joi.number().required(),
   });
-  const result = Joi.validate({
-    trip_id
-  }, schema);
+
+  // const result = Joi.validate({
+  //   trip_id
+  // }, schema);
+
+  const result = schema.validate({trip_id: req.body.trip_id});
+
   if (result.error) {
     return handleServerResponseError(res, 401, result.error.details[0].message);
   }

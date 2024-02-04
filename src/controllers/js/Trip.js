@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
 import moment from 'moment';
-import db from './db';
+import db from '../db';
 import {
   handleServerError,
   handleServerResponse
-} from '../helpers/utils';
+} from '../../helpers/utils';
 
 /**
  * @function getBus
@@ -85,10 +85,12 @@ const Trip = {
    * @returns {object} response object
    */
   async getOneTrip(req, res) {
+    console.log(req.params)
+
     try {
-      const { trip_id } = req.params;
-      const findAllQuery = 'SELECT * FROM Trips WHERE id = $1';
-      const { rows } = await db.query(findAllQuery, [trip_id]);
+      const { tripId } = req.params;
+      const findAllQuery = 'SELECT * FROM trips WHERE id = $1';
+      const { rows } = await db.query(findAllQuery, [tripId]);
       return handleServerResponse(res, 200, rows[0]);
     } catch (error) {
       handleServerError(res, error);

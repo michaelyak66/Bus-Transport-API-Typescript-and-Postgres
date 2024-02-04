@@ -14,12 +14,16 @@ pool.on('connect', () => {
   logger().info('connected to the db');
 });
 
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
+
+
 /**
  * Create Tables
  * @returns {*} void
  */
 export const createUserTable = async () => {
   const client = await pool.connect();
+  console.log("client:", client);
   const queryText = `
     CREATE TABLE IF NOT EXISTS
       Users(

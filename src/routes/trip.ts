@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import Trip from '../controllers/Trip';
 import ValidateInput from '../helpers/validateInput';
 import { isAdmin, hasToken } from '../helpers/utils';
@@ -9,9 +9,9 @@ const {
   getOneTrip,
   cancelTrip
 } = Trip;
-const { validateCreateTrip } = ValidateInput;
 
-const router = express.Router();
+const { validateCreateTrip } = ValidateInput;
+const router: Router = express.Router();
 
 router.post('/', hasToken, isAdmin, validateCreateTrip, create);
 router.get('/', hasToken, getTrips);

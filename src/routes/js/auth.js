@@ -1,6 +1,6 @@
 import express from 'express';
-import Auth from '../controllers/Auth';
-import ValidateInput from '../helpers/validateInput';
+import Auth from '../../controllers/Auth';
+import ValidateInput from '../../helpers/validateInput';
 
 const { create, login } = Auth;
 const { validateSignup, validateSignin } = ValidateInput;

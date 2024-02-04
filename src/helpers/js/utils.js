@@ -3,7 +3,8 @@ import bunyan from 'bunyan';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import db from '../controllers/db';
+import db from '../../controllers/db';
+
 
 dotenv.config();
 

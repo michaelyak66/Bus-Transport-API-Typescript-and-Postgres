@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import moment from 'moment';
 import db from './db';
 import {
@@ -7,15 +6,20 @@ import {
   handleServerResponseError,
 } from '../helpers/utils';
 
+interface Seat {
+  is_open: boolean;
+  seat_number: number;
+}
+
 /**
  * @function reserveSeat
  * @param {number} tripId id of Trip
  * @param {number} seatNumber, seat number to update
  * @returns {object} object containing Trip details
  */
-const reserveSeat = async (tripId, seatNumber) => {
+const reserveSeat = async (tripId: number, seatNumber: number): Promise<number | Error> => {
   const tripQuery = `UPDATE Trips
-  SET seats [ $3 ] = $2 WHERE id = $1 returning *`;
+  SET seats [$3] = $2 WHERE id = $1 returning *`;
   const value = [
     tripId, { is_open: false, seat_number: seatNumber }, seatNumber
   ];
@@ -33,7 +37,7 @@ const reserveSeat = async (tripId, seatNumber) => {
  * @param {number} seatNumber, seat number to update
  * @returns {object} object containing Trip details
  */
-const checkSeatNumber = async (tripId, seatNumber) => {
+const checkSeatNumber = async (tripId: number, seatNumber: number): Promise<number | Error> => {
   if (seatNumber) {
     const reservedSeatNumber = await reserveSeat(tripId, seatNumber);
     return reservedSeatNumber;
@@ -44,7 +48,7 @@ const checkSeatNumber = async (tripId, seatNumber) => {
   ];
   try {
     const { rows } = await db.query(getTrip, value);
-    const selectedSeat = rows[0].seats.find(seat => seat.is_open === true);
+    const selectedSeat = rows[0].seats.find((seat: Seat) => seat.is_open === true);
     const reservedSeatNumber = await reserveSeat(tripId, selectedSeat.seat_number);
     return reservedSeatNumber;
   } catch (error) {
@@ -52,14 +56,13 @@ const checkSeatNumber = async (tripId, seatNumber) => {
   }
 };
 
-const constructData = trip => ({
-  trip_id: trip.id,
-  bus_id: trip.bus_id,
-  origin: trip.origin,
-  destination: trip.destination,
-  trip_date: trip.trip_date,
-  fare: trip.fare,
-  seats: trip.seats
+const constructData = (trip: any) => ({
+  id: trip.id,
+  user_id: trip.user_id,
+  trip_id: trip.trip_id,
+  seat_number: trip.seat_number,
+  created_date: trip.created_date,
+  modified_date: trip.modified_date,
 });
 
 const Booking = {
@@ -69,7 +72,7 @@ const Booking = {
    * @param {object} res response object
    * @returns {object} response object
    */
-  async create(req, res) {
+  async create(req: any, res: any): Promise<object> {
     const {
       user_id, trip_id, seat_number
     } = req.body;
@@ -100,7 +103,7 @@ const Booking = {
    * @param {object} res response object
    * @returns {object} response object
    */
-  async getBookings(req, res) {
+  async getBookings(req: any, res: any): Promise<object> {
     try {
       const { is_admin, user_id } = req.body;
       const id = req.decoded.id || user_id;
@@ -127,11 +130,18 @@ const Booking = {
    * @param {object} res response object
    * @returns {object} response object
    */
-  async getOneBooking(req, res) {
+  async getOneBooking(req: any, res: any): Promise<object> {
     try {
       const { bookingId } = req.params;
+      console.log(bookingId);
       const findAllQuery = 'SELECT * FROM Bookings WHERE id = $1';
       const { rows } = await db.query(findAllQuery, [bookingId]);
+      console.log(rows);
+      if (!rows[0]) {
+        return handleServerResponse(res, 200, []);
+
+      }
+
       return handleServerResponse(res, 200, constructData(rows[0]));
     } catch (error) {
       handleServerError(res, error);
@@ -144,7 +154,7 @@ const Booking = {
    * @param {object} res
    * @returns {void} return statuc code 204
    */
-  async deleteBooking(req, res) {
+  async deleteBooking(req: any, res: any): Promise<object> {
     const { bookingId } = req.params;
     const bookingQuery = 'SELECT * FROM Bookings WHERE id = $1';
     const { rows } = await db.query(bookingQuery, [bookingId]);

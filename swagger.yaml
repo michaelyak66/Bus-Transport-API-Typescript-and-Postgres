@@ -20,7 +20,7 @@ tags:
   - name: Admin
     description: All Admin endpoint
 servers:
-  - url: 'https://save-a-seat.herokuapp.com'
+  - url: 'http://localhost:1337/'
 paths:
   /api/v1/auth/signup:
     post:
@@ -355,7 +355,7 @@ paths:
         - in: params
           name: tripId
           schema:
-            type: string
+            type: number
             required: true
         - in: header
           name: x-access-token

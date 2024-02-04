@@ -1,5 +1,5 @@
 import moment from 'moment';
-import db from './db';
+import db from '../db';
 import {
   createToken,
   hashPassword,
@@ -7,7 +7,7 @@ import {
   handleServerResponse,
   handleServerResponseError,
   isPassword
-} from '../helpers/utils';
+} from '../../helpers/utils';
 
 const Auth = {
   async create(req, res) {
@@ -16,7 +16,10 @@ const Auth = {
       email, first_name, last_name, password, userType
     } = req.body;
     try {
+      console.log("dssssssssssssssssss")
       const hash = await hashPassword(password);
+      console.log(hash)
+
       const createQuery = `INSERT INTO
       Users(email, first_name, last_name, password, is_admin, created_date, modified_date)
       VALUES($1, $2, $3, $4, $5, $6, $7)
@@ -34,6 +37,7 @@ const Auth = {
         token
       });
     } catch (error) {
+      console.log(error)
       if (error.routine === '_bt_check_unique') {
         return handleServerResponseError(res, 409, `User with Email:- ${email.trim().toLowerCase()} already exists`);
       }

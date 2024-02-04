@@ -1,7 +1,7 @@
 import express from 'express';
-import Booking from '../controllers/Booking';
-import ValidateInput from '../helpers/validateInput';
-import { hasToken, checkSeatNumber } from '../helpers/utils';
+import Booking from '../../controllers/Booking';
+import ValidateInput from '../../helpers/validateInput';
+import { hasToken, checkSeatNumber } from '../../helpers/utils';
 
 const {
   create,

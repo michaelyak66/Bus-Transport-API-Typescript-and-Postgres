@@ -1,10 +1,10 @@
 import moment from 'moment';
-import db from './db';
+import db from '../db';
 import {
   handleServerError,
   handleServerResponse,
   handleServerResponseError,
-} from '../helpers/utils';
+} from '../../helpers/utils';
 
 const Bus = {
   async create(req, res) {

@@ -1,7 +1,7 @@
 import express from 'express';
-import Bus from '../controllers/Bus';
-import ValidateInput from '../helpers/validateInput';
-import { isAdmin, hasToken } from '../helpers/utils';
+import Bus from '../../controllers/Bus';
+import ValidateInput from '../../helpers/validateInput';
+import { isAdmin, hasToken } from '../../helpers/utils';
 
 const { create } = Bus;
 const { validateCreateBus } = ValidateInput;
